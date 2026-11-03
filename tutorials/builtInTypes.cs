@@ -67,3 +67,12 @@ Dictionary<string, int> scores = new()
     [Charlie] = 95
 };
 
+dynamic value = 42;
+Console.WriteLine(value.GetType());
+
+value = "now I's a string";
+Console.WriteLine(value.GetType());
+
+// The compiler doesnt check operations on dynamic at compile time 
+// errors surface at the run time instead. 
+

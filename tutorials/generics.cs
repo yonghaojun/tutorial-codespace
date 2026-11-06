@@ -89,3 +89,58 @@ foreach (var(key, value) in overrides)
 }
 
 Console.WriteLine($"Timeout: {config["Timeout"]}, Retries: {config["Retries"]}");
+
+static T Max<T> (T a, T b) where T : IComparable<T> => a.CompareTo(b) >= 0 ? a : b;
+
+Console.WriteLine(Max(3,7));
+Console.WriteLine(Max("apple", "banana"));
+
+static T CreateDefault<T> () where T: new() => new T();
+
+var list = CreateDefault<List<int>>(); // Creates an empty List<int>
+Console.WriteLine($"Empty list count: {list.Count}");
+
+// Covariance: IEnumerable<Dog> can e used as IEnumerable<Animal>
+// because IEnumerable<out T> is covariant
+
+List<Dog> dogs = [new("Rex", new ("Buddy"))];
+IEnumerable<Animal> animals = dogs;
+
+foreach (var animal in animals)
+{
+    Console.WriteLine(animal.Name);
+}
+
+// Contravariance: Actin<Animal> can be used as Action<Dog> 
+// becuase Action<in T> is controvariant 
+Action<Animal> printAnimal = a => Console.WriteLine($"Animal: {a.Name}");
+Action<Dog> printDog = printAnimal;
+
+printDog(new Dog("Max"));
+
+public class Genericlist<T>
+{
+    private class Node(T data)
+    {
+        public T Data {get; set;} = data;
+        public Node? Next {get; set;}
+    }
+
+    private Node? head;
+
+    public void AddHead(T data)
+    {
+        var node = new Node(data) {Next = head};
+        head = node;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        var current = head;
+        while (current is not null)
+        {
+            yield return current.Data;
+            current = current.Next;
+        }
+    }
+}
